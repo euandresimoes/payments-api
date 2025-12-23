@@ -45,6 +45,7 @@ export const repository = {
           id: true,
           username: true,
           email: true,
+          role: true,
           created_at: true,
         },
       });
@@ -74,6 +75,7 @@ export const repository = {
           username: true,
           email: true,
           password_hash: true,
+          role: true,
         },
       });
 
@@ -98,6 +100,7 @@ export const repository = {
         id: user.id,
         email: user.email,
         username: user.username,
+        role: user.role,
       });
 
       return {
@@ -125,6 +128,7 @@ export const repository = {
           id: true,
           username: true,
           email: true,
+          role: true,
           created_at: true,
         },
       });

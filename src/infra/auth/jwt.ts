@@ -4,6 +4,7 @@ type Payload = {
   id: string;
   email: string;
   username: string;
+  role: string;
 };
 
 const secret = `${process.env.JWT_SECRET}`;

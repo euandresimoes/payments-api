@@ -56,7 +56,7 @@ export const repository = {
         data: user,
       };
     } catch (err) {
-      app.log.error(err);
+      console.error(err);
       return {
         status: 500,
         error: 'internal server error',
@@ -86,10 +86,7 @@ export const repository = {
         };
       }
 
-      if (
-        data.password !== user.password_hash &&
-        !bcrypt.compareSync(data.password, user.password_hash)
-      ) {
+      if (!bcrypt.compareSync(data.password, user.password_hash)) {
         return {
           status: 401,
           error: 'invalid credentials',
@@ -97,7 +94,7 @@ export const repository = {
       }
 
       const token = jwtAuth.generate({
-        id: user.id,
+        id: String(user.id),
         email: user.email,
         username: user.username,
         role: user.role,
@@ -108,7 +105,7 @@ export const repository = {
         data: token,
       };
     } catch (err) {
-      app.log.error(err);
+      console.error(err);
       return {
         status: 500,
         error: 'internal server error',
@@ -120,7 +117,7 @@ export const repository = {
     try {
       const user = await app.prisma.users.findUnique({
         where: {
-          id: data.id,
+          id: Number(data.id),
           username: data.username,
           email: data.email,
         },
@@ -146,7 +143,7 @@ export const repository = {
         data: user,
       };
     } catch (err) {
-      app.log.error(err);
+      console.error(err);
       return {
         status: 500,
         error: 'internal server error.',

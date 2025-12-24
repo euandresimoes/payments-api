@@ -13,7 +13,7 @@ export const jwtAuth = {
   generate(payload: Payload): string {
     try {
       return jwt.sign(payload, secret, {
-        subject: payload.id,
+        subject: String(payload.id),
         issuer: 'payments-backend',
         expiresIn: '1h',
       });

@@ -6,12 +6,22 @@ import { authHandler } from './modules/auth/handler';
 // Create Fastify instance
 //
 export const app = Fastify({
-  logger: true,
+  logger: {
+    transport: {
+      target: 'pino-pretty',
+      options: {
+        colorize: true,
+        translateTime: 'HH:MM:ss',
+        ignore: 'pid,hostname',
+      },
+    },
+  },
 });
 
 //
 // Plugins
 //
+// Prisma
 app.register(prismaPlugin);
 
 //
@@ -29,11 +39,15 @@ app.register(authHandler, { prefix: '/auth' });
 //
 // Init Fastify
 //
-app.listen({ port: 3000 }, function (err, addr) {
-  if (err) {
-    app.log.error(err);
-    process.exit(1);
-  }
+async function start() {
+  app.listen({ port: 3000 }, function (err, addr) {
+    if (err) {
+      app.log.error(err);
+      process.exit(1);
+    }
 
-  app.log.info(`Server is now listening on ${addr}`);
-});
+    app.log.info(`Server is now listening on ${addr}`);
+  });
+}
+
+start();

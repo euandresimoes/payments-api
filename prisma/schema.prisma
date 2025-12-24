@@ -13,10 +13,29 @@ enum Role {
 }
 
 model Users {
-  id String @id @default(cuid())
+  id Int @id @default(autoincrement())
   username String @unique
   email String @unique
   password_hash String
   role Role @default(USER)
+  created_at DateTime @default(now())
+}
+
+enum PaymentLinkStatus {
+  ACTIVE
+  PAID
+  EXPIRED
+}
+
+model PaymentLink {
+  id Int @id @default(autoincrement())
+  public_id String @default(cuid()) @unique
+  seller_id Int
+  title String
+  description String
+  image_url String
+  price_cents Decimal
+  expires_at DateTime
+  status PaymentLinkStatus @default(ACTIVE)
   created_at DateTime @default(now())
 }

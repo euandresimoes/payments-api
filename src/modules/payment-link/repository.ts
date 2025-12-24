@@ -1,12 +1,11 @@
 import { app } from '../../server';
 import { ApiResponse } from '../../shared/models/api-response';
-import { RequestUser } from '../../shared/models/request-user';
-import { CreatePaymentModel } from './model';
+import { CreatePaymentLinkModel } from './model';
 
 export const repository = {
   async create(
     seller_id: string,
-    data: CreatePaymentModel,
+    data: CreatePaymentLinkModel,
   ): Promise<ApiResponse> {
     try {
       const paymentLink = await app.prisma.paymentLink.create({
@@ -122,30 +121,28 @@ export const repository = {
 
   async deleteByID(seller_id: string, id: number): Promise<ApiResponse> {
     try {
-      const paymentLink = await app.prisma.paymentLink.findUnique({
+      const deletedPayment = await app.prisma.paymentLink.delete({
         where: {
           id: id,
           seller_id: Number(seller_id),
         },
-      });
-
-      if (!paymentLink) {
-        return {
-          status: 404,
-          error: 'payment link not found',
-        };
-      }
-
-      await app.prisma.paymentLink.delete({
-        where: {
-          id: id,
-          seller_id: Number(seller_id),
+        select: {
+          id: true,
+          public_id: true,
+          seller_id: true,
+          title: true,
+          description: true,
+          image_url: true,
+          price_cents: true,
+          status: true,
+          expires_at: true,
+          created_at: true,
         },
       });
 
       return {
         status: 200,
-        data: paymentLink,
+        data: deletedPayment,
       };
     } catch (err) {
       console.error(err);

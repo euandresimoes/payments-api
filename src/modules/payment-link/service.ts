@@ -1,11 +1,11 @@
 import { ApiResponse } from '../../shared/models/api-response';
-import { CreatePaymentModel } from './model';
+import { CreatePaymentLinkModel } from './model';
 import { repository } from './repository';
 
 export const service = {
   async create(
     seller_id: string,
-    data: CreatePaymentModel,
+    data: CreatePaymentLinkModel,
   ): Promise<ApiResponse> {
     return repository.create(seller_id, data);
   },

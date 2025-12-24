@@ -1,4 +1,4 @@
-export type CreatePaymentModel = {
+export type CreatePaymentLinkModel = {
   title: string;
   description: string;
   image_url: string;
@@ -6,7 +6,7 @@ export type CreatePaymentModel = {
   expires_at: Date;
 };
 
-export const CreatePaymentSchema = {
+export const CreatePaymentLinkSchema = {
   type: 'object',
   properties: {
     title: { type: 'string' },

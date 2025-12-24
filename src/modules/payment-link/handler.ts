@@ -1,9 +1,9 @@
 import { FastifyInstance } from 'fastify';
-import { CreatePaymentModel, CreatePaymentSchema } from './model';
 import { authHook } from '../../infra/hooks/auth-hook';
 import { service } from './service';
 import { ApiResponseSchema } from '../../shared/models/api-response';
 import { IQuery, IQueryPublicID } from '../../shared/models/query';
+import { CreatePaymentLinkModel, CreatePaymentLinkSchema } from './model';
 
 export async function paymentLinkHandler(app: FastifyInstance) {
   app.post(
@@ -11,7 +11,7 @@ export async function paymentLinkHandler(app: FastifyInstance) {
     {
       preHandler: authHook,
       schema: {
-        body: CreatePaymentSchema,
+        body: CreatePaymentLinkSchema,
         headers: {
           type: 'object',
           properties: {
@@ -29,7 +29,7 @@ export async function paymentLinkHandler(app: FastifyInstance) {
     },
     async function (req, res) {
       const seller_id = req.user!.id as string;
-      const data = req.body as CreatePaymentModel;
+      const data = req.body as CreatePaymentLinkModel;
 
       const result = await service.create(seller_id, data);
       res.status(result.status).send(result);

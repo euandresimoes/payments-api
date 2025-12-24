@@ -63,6 +63,34 @@ export const repository = {
     }
   },
 
+  async getByPublicID(public_id: string): Promise<ApiResponse> {
+    try {
+      const paymentLink = await app.prisma.paymentLink.findUnique({
+        where: {
+          public_id,
+        },
+      });
+
+      if (!paymentLink) {
+        return {
+          status: 404,
+          error: 'payment link not found',
+        };
+      }
+
+      return {
+        status: 200,
+        data: paymentLink,
+      };
+    } catch (err) {
+      console.error(err);
+      return {
+        status: 500,
+        error: 'internal server error.',
+      };
+    }
+  },
+
   async getByID(seller_id: string, id: number): Promise<ApiResponse> {
     try {
       const paymentLink = await app.prisma.paymentLink.findUnique({

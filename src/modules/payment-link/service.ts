@@ -14,6 +14,10 @@ export const service = {
     return repository.getAll(seller_id);
   },
 
+  async getByPublicID(public_id: string): Promise<ApiResponse> {
+    return repository.getByPublicID(public_id);
+  },
+
   async getByID(seller_id: string, id: number): Promise<ApiResponse> {
     return repository.getByID(seller_id, id);
   },

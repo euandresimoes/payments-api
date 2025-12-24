@@ -1,6 +1,9 @@
 import Fastify from 'fastify';
 import { prismaPlugin } from './infra/db/database';
 import { authHandler } from './modules/auth/handler';
+import { paymentLinkHandler } from './modules/payment-link/handler';
+import swagger from '@fastify/swagger';
+import scalar from '@scalar/fastify-api-reference';
 
 //
 // Create Fastify instance
@@ -21,6 +24,35 @@ export const app = Fastify({
 //
 // Plugins
 //
+// Swagger
+app.register(swagger, {
+  routePrefix: '/docs',
+  exposeRoute: true,
+  swagger: {
+    info: {
+      title: 'Payments API',
+      version: '1.0.0',
+    },
+    securityDefinitions: {
+      BearerAuth: {
+        type: 'apiKey',
+        name: 'Authorization',
+        in: 'header',
+      },
+    },
+    security: [{ BearerAuth: [] }],
+  },
+} as any);
+
+// Scalar API
+app.register(scalar, {
+  routePrefix: '/docs',
+  configuration: {
+    theme: 'deepSpace',
+    layout: 'modern',
+  },
+});
+
 // Prisma
 app.register(prismaPlugin);
 
@@ -35,6 +67,7 @@ app.get('/health', function (req, res) {
 });
 
 app.register(authHandler, { prefix: '/auth' });
+app.register(paymentLinkHandler, { prefix: '/payment-link' });
 
 //
 // Init Fastify

@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "bun --watch src/server.ts",
     "db:push": "bunx prisma db push",
-    "db:migrate": "bunx prisma migrate deploy",
+    "db:migrate:dev": "bunx prisma migrate dev",
+    "db:migrate:deploy": "bunx prisma migrate deploy",
     "jest": "bunx jest",
     "jest:watch": "bunx jest --watch",
     "build": "bunx tsc -p tsconfig.build.json",
@@ -22,9 +23,11 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@fastify/swagger": "^9.6.1",
     "@jest/globals": "^30.2.0",
     "@prisma/adapter-pg": "^7.2.0",
     "@prisma/client": "^7.2.0",
+    "@scalar/fastify-api-reference": "^1.40.9",
     "@types/bcrypt": "^6.0.0",
     "@types/jsonwebtoken": "^9.0.10",
     "bcrypt": "^6.0.0",

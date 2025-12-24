@@ -1,5 +1,6 @@
 import type { ApiResponse } from '../../shared/models/api-response';
-import type { LoginModel, RegisterModel, RequestUser } from './model';
+import { RequestUser } from '../../shared/models/request-user';
+import type { LoginModel, RegisterModel } from './model';
 import { repository } from './repository';
 
 export const service = {

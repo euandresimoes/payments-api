@@ -2,7 +2,8 @@ import { jwtAuth } from '../../infra/auth/jwt';
 import type { ApiResponse } from '../../shared/models/api-response';
 import { app } from '../../server';
 import bcrypt from 'bcrypt';
-import type { LoginModel, RegisterModel, RequestUser } from './model';
+import type { LoginModel, RegisterModel } from './model';
+import { RequestUser } from '../../shared/models/request-user';
 
 export const repository = {
   async register(data: RegisterModel): Promise<ApiResponse> {

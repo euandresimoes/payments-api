@@ -1,0 +1,130 @@
+import { app } from '../../server';
+import { ApiResponse } from '../../shared/models/api-response';
+import { RequestUser } from '../../shared/models/request-user';
+import { CreatePaymentModel } from './model';
+
+export const repository = {
+  async create(
+    seller_id: string,
+    data: CreatePaymentModel,
+  ): Promise<ApiResponse> {
+    try {
+      const paymentLink = await app.prisma.paymentLink.create({
+        data: {
+          seller_id: Number(seller_id),
+          ...data,
+        },
+        select: {
+          id: true,
+          public_id: true,
+          seller_id: true,
+          title: true,
+          description: true,
+          image_url: true,
+          price_cents: true,
+          expires_at: true,
+          status: true,
+          created_at: true,
+        },
+      });
+
+      return {
+        status: 201,
+        message: 'payment link created',
+        data: paymentLink,
+      };
+    } catch (err) {
+      console.error(err);
+      return {
+        status: 500,
+        error: 'internal server error.',
+      };
+    }
+  },
+
+  async getAll(seller_id: string): Promise<ApiResponse> {
+    try {
+      const paymentLinks = await app.prisma.paymentLink.findMany({
+        where: {
+          seller_id: Number(seller_id),
+        },
+      });
+
+      return {
+        status: 200,
+        data: paymentLinks,
+      };
+    } catch (err) {
+      console.error(err);
+      return {
+        status: 500,
+        error: 'internal server error.',
+      };
+    }
+  },
+
+  async getByID(seller_id: string, id: number): Promise<ApiResponse> {
+    try {
+      const paymentLink = await app.prisma.paymentLink.findUnique({
+        where: {
+          id: id,
+          seller_id: Number(seller_id),
+        },
+      });
+
+      if (!paymentLink) {
+        return {
+          status: 404,
+          error: 'payment link not found',
+        };
+      }
+
+      return {
+        status: 200,
+        data: paymentLink,
+      };
+    } catch (err) {
+      console.error(err);
+      return {
+        status: 500,
+        error: 'internal server error.',
+      };
+    }
+  },
+
+  async deleteByID(seller_id: string, id: number): Promise<ApiResponse> {
+    try {
+      const paymentLink = await app.prisma.paymentLink.findUnique({
+        where: {
+          id: id,
+          seller_id: Number(seller_id),
+        },
+      });
+
+      if (!paymentLink) {
+        return {
+          status: 404,
+          error: 'payment link not found',
+        };
+      }
+
+      await app.prisma.paymentLink.delete({
+        where: {
+          id: id,
+          seller_id: Number(seller_id),
+        },
+      });
+
+      return {
+        status: 200,
+        data: paymentLink,
+      };
+    } catch (err) {
+      console.error(err);
+      return {
+        status: 500,
+        error: 'internal server error.',
+      };
+    }
+  },
+};
